@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if current_user.is_anonymous %}
+<h1>Hello! Here are the most recently added games</h1>
+<p>Login to add games to your list of favorites</p>
+{% else %}
+<h1>Hello, {{current_user.username }}! Here are the most recently added games</h1>
+{% endif %}
+
+<ul>
+  {% for game in games %}
+  <li>{{ game.name }}
+    {% if not current_user.is_anonymous %}
+    {% if current_user.is_favorite(game) %}
+    <a href="{{ url_for('unfavorite', game=game.id) }}">UnFavorite</a>
+    {% else %}
+    <a href="{{ url_for('favorite', game=game.id)}}">Favorite</a>
+    {% endif %}
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
