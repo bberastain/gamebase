@@ -2,7 +2,7 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app.forms import GameForm, LoginForm, RegistrationForm, EditProfileForm
-from app.models import Game, User
+from app.models import Game, User, Category1, Category2
 from werkzeug.urls import url_parse
 
 
@@ -55,8 +55,13 @@ def register():
 @app.route('/addgame', methods=['GET', 'POST'])
 def addgame():
     form = GameForm()
+    cat1 = Category1.query.order_by(Category1.id).all()
+    cat2 = Category2.query.order_by(Category2.id).all()
+    form.category1.choices = [(x, y.label) for x, y in enumerate(cat1)]
+    form.category2.choices = [(x, y.label) for x, y in enumerate(cat2)]
     if form.validate_on_submit():
-        game = Game(name=form.name.data)
+        game = Game(name=form.name.data, category1_id=form.category1.data,
+                    category2_id=form.category2.data)
         db.session.add(game)
         db.session.commit()
         flash('Thank you for adding a new game!')

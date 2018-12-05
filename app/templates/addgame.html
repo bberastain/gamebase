@@ -11,6 +11,20 @@
       <span style='color: red;'>[{{ error}}]</span>
       {% endfor %}
   </p>
+  <p>
+    {{ form.category1.label }}<br>
+    {{ form.category1(size=1) }}
+    {% for error in form.category1.errors %}
+    <span style='color: red;'>[{{ error}}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {{ form.category2.label }}<br>
+    {{ form.category2(size=1) }}
+    {% for error in form.category2.errors %}
+    <span style='color: red;'>[{{ error}}]</span>
+    {% endfor %}
+  </p>
   <p> {{ form.submit() }}</p>
 </form>
 {% endblock %}

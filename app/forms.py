@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField, \
-    TextAreaField
+    TextAreaField, SelectField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, \
     Length
 from app.models import User
@@ -8,6 +8,8 @@ from app.models import User
 
 class GameForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
+    category1 = SelectField('Category 1', coerce=int, default=0)
+    category2 = SelectField('Category 2', coerce=int, default=0)
     submit = SubmitField('Add Game')
 
 

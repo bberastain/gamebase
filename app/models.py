@@ -3,6 +3,9 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from hashlib import md5
 
+# option to create a category entry
+# accept suggestions for new category dropdowns
+
 
 favorites = db.Table('favorites',
                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
@@ -13,12 +16,33 @@ favorites = db.Table('favorites',
 class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, unique=True)
+    category1_id = db.Column(db.Integer, db.ForeignKey('category1.id'))
+    category2_id = db.Column(db.Integer, db.ForeignKey('category2.id'))
     subscribers = db.relationship(
             'User', secondary=favorites,
             backref=db.backref('subscriptions', lazy='dynamic'))
+    # subscriptions becomes method of instance of User
 
     def __repr__(self):
         return '<Game: {}>'.format(self.name)
+
+
+class Category1(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    label = db.Column(db.String(64), index=True, unique=True)
+    game = db.relationship('Game', backref='category1', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Category1: {}>'.format(self.label)
+
+
+class Category2(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    label = db.Column(db.String(64), index=True, unique=True)
+    game = db.relationship('Game', backref='category2', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Category2: {}>'.format(self.label)
 
 
 class User(UserMixin, db.Model):
