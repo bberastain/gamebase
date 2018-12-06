@@ -7,17 +7,19 @@ from app.models import Game, User, Category1, Category2
 from werkzeug.urls import url_parse
 
 
-@app.route('/search', methods=['GET', 'POST'])
-def search():
+@app.route('/')
+@app.route('/index', methods=['GET', 'POST'])
+def index():
     form = SearchForm()
     cat1 = Category1.query.order_by(Category1.id).all()
     cat2 = Category2.query.order_by(Category2.id).all()
     form.category1.choices = [(x+1, y.label) for x, y in enumerate(cat1)]
     form.category2.choices = [(x+1, y.label) for x, y in enumerate(cat2)]
+    recent = Game.query.order_by(Game.id.desc()).all()
     if form.validate_on_submit():
         if form.category1.data == 1 and form.category2.data == 1:
             flash('Please select at least one category')
-            return redirect(url_for('search'))
+            return redirect(url_for('index'))
         elif form.category1.data == 1 and form.category2.data != 1:
             games = Game.query.filter_by(
                     category2_id=form.category2.data).all()
@@ -33,15 +35,8 @@ def search():
         cat2 = Category2.query.order_by(Category2.id).all()
         form.category1.choices = [(x+1, y.label) for x, y in enumerate(cat1)]
         form.category2.choices = [(x+1, y.label) for x, y in enumerate(cat2)]
-        return render_template('search.html', games=games, form=form)
-    return render_template('search.html', form=form)
-
-
-@app.route('/')
-@app.route('/index')
-def index():
-    games = Game.query.order_by(Game.id.desc()).all()
-    return render_template('index.html', games=games)
+        return render_template('index.html', games=games, form=form)
+    return render_template('index.html', form=form, recent=recent)
 
 
 @app.route('/login', methods=['GET', 'POST'])

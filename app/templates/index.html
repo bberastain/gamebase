@@ -1,17 +1,52 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if current_user.is_anonymous %}
-<h1>Hello! Here are the most recently added games</h1>
-<p>Login to add games to your list of favorites</p>
-{% else %}
-<h1>Hello, {{current_user.username }}! Here are the most recently added games</h1>
+{% if not current_user.is_anonymous %}
+<h1>Hello, {{current_user.username }}!</h1>
 {% endif %}
 
-<ul>
-  {% for game in games %}
+<h1>Search games by category</h1>
+
+<form action='' method='post' novalidate> <!-- novalidate? -->
+  {{ form.hidden_tag() }}
+  <p>
+    {{ form.category1.label }}<br>
+    {{ form.category1(size=1) }}
+    {% for error in form.category1.errors %}
+    <span style='color: red;'>[{{ error}}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {{ form.category2.label }}<br>
+    {{ form.category2(size=1) }}
+    {% for error in form.category2.errors %}
+    <span style='color: red;'>[{{ error}}]</span>
+    {% endfor %}
+  </p>
+  <p> {{ form.submit() }}</p>
+</form>
+
+{% if current_user.is_anonymous %}
+  <h1>Login to add games to your list of favorites</h1>
+{% endif %}
+
+{% if recent %}
+  <h2>Here are the most recently added games</h2>
+  {% for game in recent %}
     {% include '_entry.html' %}
   {% endfor %}
-</ul>
+{% endif %}
+
+{% if games %}
+  <h2>Games with those categories:</h2>
+    {% for game in games %}
+      {% include '_entry.html' %}
+    {% endfor %}
+{% endif %}
+
+
+
+
+
 
 {% endblock %}
