@@ -21,7 +21,7 @@ Here are your favorite games
 <ul>
   {% with games = current_user.favorite_games() %}
   {% for game in games %}
-  <li>{{ game.name }} - <a href="{{ url_for('unfavorite', game=game.id) }}">UnFavorite</a></li>
+    {% include '_entry.html' %}
   {% endfor %}
   {% endwith %}
 {% endblock %}

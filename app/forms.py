@@ -6,10 +6,16 @@ from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, \
 from app.models import User
 
 
-class GameForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
+class SearchForm(FlaskForm):
     category1 = SelectField('Category 1', coerce=int, default=0)
     category2 = SelectField('Category 2', coerce=int, default=0)
+    submit = SubmitField('Search Game Base')
+
+
+class GameForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    category1 = SelectField('Category 1', coerce=int, default=1)
+    category2 = SelectField('Category 2', coerce=int, default=1)
     submit = SubmitField('Add Game')
 
 

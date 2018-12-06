@@ -1,9 +1,40 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
-from app.forms import GameForm, LoginForm, RegistrationForm, EditProfileForm
+from app.forms import GameForm, LoginForm, RegistrationForm, EditProfileForm, \
+    SearchForm
 from app.models import Game, User, Category1, Category2
 from werkzeug.urls import url_parse
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    form = SearchForm()
+    cat1 = Category1.query.order_by(Category1.id).all()
+    cat2 = Category2.query.order_by(Category2.id).all()
+    form.category1.choices = [(x+1, y.label) for x, y in enumerate(cat1)]
+    form.category2.choices = [(x+1, y.label) for x, y in enumerate(cat2)]
+    if form.validate_on_submit():
+        if form.category1.data == 1 and form.category2.data == 1:
+            flash('Please select at least one category')
+            return redirect(url_for('search'))
+        elif form.category1.data == 1 and form.category2.data != 1:
+            games = Game.query.filter_by(
+                    category2_id=form.category2.data).all()
+        elif form.category1.data != 1 and form.category2.data == 1:
+            games = Game.query.filter_by(
+                    category1_id=form.category1.data).all()
+        else:
+            games = Game.query.filter_by(
+                    category1_id=form.category1.data,
+                    category2_id=form.category2.data).all()
+        form = SearchForm()
+        cat1 = Category1.query.order_by(Category1.id).all()
+        cat2 = Category2.query.order_by(Category2.id).all()
+        form.category1.choices = [(x+1, y.label) for x, y in enumerate(cat1)]
+        form.category2.choices = [(x+1, y.label) for x, y in enumerate(cat2)]
+        return render_template('search.html', games=games, form=form)
+    return render_template('search.html', form=form)
 
 
 @app.route('/')

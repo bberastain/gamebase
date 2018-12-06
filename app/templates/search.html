@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Search games by category</h1>
+{% if current_user.is_anonymous %}
+<p>Login to add games to your list of favorites!</p>
+{% endif %}
+
+
+<form action='' method='post' novalidate> <!-- novalidate? -->
+  {{ form.hidden_tag() }}
+  <p>
+    {{ form.category1.label }}<br>
+    {{ form.category1(size=1) }}
+    {% for error in form.category1.errors %}
+    <span style='color: red;'>[{{ error}}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {{ form.category2.label }}<br>
+    {{ form.category2(size=1) }}
+    {% for error in form.category2.errors %}
+    <span style='color: red;'>[{{ error}}]</span>
+    {% endfor %}
+  </p>
+  <p> {{ form.submit() }}</p>
+</form>
+
+{% if games %}
+  <p>That search returned:</p>
+    {% for game in games %}
+      {% include '_entry.html' %}
+    {% endfor %}
+{% endif %}
+
+
+
+
+
+
+{% endblock %}
