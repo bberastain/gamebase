@@ -1,0 +1,23 @@
+<li class="list-group-item">
+  <b>{{ game.name }}</b>
+
+  {% if game.category1 %}
+  {% if game.category1.label != 'N/A' %}
+  - {{ game.category1.label }}
+  {% endif %}
+  {% endif %}
+
+  {% if game.category2 %}
+  {% if game.category2.label != 'N/A' %}
+  - {{ game.category2.label }}
+  {% endif %}
+  {% endif %}
+
+  {% if not current_user.is_anonymous %}
+  {% if current_user.is_favorite(game) %}
+  <a href="{{ url_for('unfavorite', game=game.id) }}">UnFavorite</a>
+  {% else %}
+  <a href="{{ url_for('favorite', game=game.id)}}">Favorite</a>
+  {% endif %}
+  {% endif %}
+</li>

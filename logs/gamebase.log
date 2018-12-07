@@ -1,0 +1,23 @@
+2018-12-06 13:53:26,733 INFO: Game Base startup [in /Users/vanyroca/Desktop/BrunoGameBase/app/__init__.py:44]
+2018-12-06 13:57:05,685 INFO: Game Base startup [in /Users/vanyroca/Desktop/BrunoGameBase/app/__init__.py:44]
+2018-12-06 13:57:18,929 INFO: Game Base startup [in /Users/vanyroca/Desktop/BrunoGameBase/app/__init__.py:44]
+2018-12-06 15:45:58,166 INFO: Game Base startup [in /Users/vanyroca/Desktop/BrunoGameBase/app/__init__.py:46]
+2018-12-06 15:46:26,349 ERROR: Exception on / [GET] [in /Users/vanyroca/Desktop/BrunoGameBase/venv/lib/python3.6/site-packages/flask/app.py:1761]
+Traceback (most recent call last):
+  File "/Users/vanyroca/Desktop/BrunoGameBase/venv/lib/python3.6/site-packages/flask/app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/vanyroca/Desktop/BrunoGameBase/venv/lib/python3.6/site-packages/flask/app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/vanyroca/Desktop/BrunoGameBase/venv/lib/python3.6/site-packages/flask/app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/vanyroca/Desktop/BrunoGameBase/venv/lib/python3.6/site-packages/flask/_compat.py", line 35, in reraise
+    raise value
+  File "/Users/vanyroca/Desktop/BrunoGameBase/venv/lib/python3.6/site-packages/flask/app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/vanyroca/Desktop/BrunoGameBase/venv/lib/python3.6/site-packages/flask/app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/vanyroca/Desktop/BrunoGameBase/app/routes.py", line 22, in index
+    init_cats()
+  File "/Users/vanyroca/Desktop/BrunoGameBase/app/routes.py", line 14, in init_cats
+    form.category1.choices = [(x+1, y.label) for x, y in enumerate(cat1)]
+NameError: name 'form' is not defined

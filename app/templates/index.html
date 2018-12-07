@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
+{% if not current_user.is_anonymous %}
+<h1>Hello, {{current_user.username }}!</h1>
+{% endif %}
+
+<h1>Search games by category</h1>
+
+<div class="row">
+  <div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+  </div>
+</div>
+
+{% if current_user.is_anonymous %}
+  <h1>Login to add games to your list of favorites</h1>
+{% endif %}
+
+{% if recent %}
+  <h2>Here are the most recently added games</h2>
+  <table class="table table-hover">
+  {% for game in recent %}
+      <tr valign="top">
+        <td>
+        {% include '_entry.html' %}
+        </td>
+      </tr>
+  {% endfor %}
+  </table>
+{% endif %}
+
+{% if games %}
+  <h2>Games with those categories:</h2>
+  <table class="table table-hover">
+    {% for game in games %}
+    <tr valign="top">
+      <td>
+      {% include '_entry.html' %}
+      </td>
+    </tr>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}
