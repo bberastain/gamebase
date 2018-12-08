@@ -7,14 +7,19 @@ from app.models import Game, User, Category1, Category2
 from werkzeug.urls import url_parse
 
 
-@app.route('/')
-@app.route('/index', methods=['GET', 'POST'])
-def index():
+def init_cats():
     form = SearchForm()
     cat1 = Category1.query.order_by(Category1.id).all()
     cat2 = Category2.query.order_by(Category2.id).all()
     form.category1.choices = [(x+1, y.label) for x, y in enumerate(cat1)]
     form.category2.choices = [(x+1, y.label) for x, y in enumerate(cat2)]
+    return form
+
+
+@app.route('/')
+@app.route('/index', methods=['GET', 'POST'])
+def index():
+    form = init_cats()
     recent = Game.query.order_by(Game.id.desc()).all()
     if form.validate_on_submit():
         if form.category1.data == 1 and form.category2.data == 1:
@@ -30,11 +35,7 @@ def index():
             games = Game.query.filter_by(
                     category1_id=form.category1.data,
                     category2_id=form.category2.data).all()
-        form = SearchForm()
-        cat1 = Category1.query.order_by(Category1.id).all()
-        cat2 = Category2.query.order_by(Category2.id).all()
-        form.category1.choices = [(x+1, y.label) for x, y in enumerate(cat1)]
-        form.category2.choices = [(x+1, y.label) for x, y in enumerate(cat2)]
+        form = init_cats()
         return render_template('index.html', games=games, form=form)
     return render_template('index.html', form=form, recent=recent)
 

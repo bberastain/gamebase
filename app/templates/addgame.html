@@ -1,30 +1,11 @@
 {% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
-{% block content %}
+{% block app_content %}
 <h1>Add New Game</h1>
-<form action='' method='post' novalidate> <!-- novalidate? -->
-  {{ form.hidden_tag() }}
-  <p>
-      {{ form.name.label }}<br>
-      {{ form.name(size=50) }}
-      {% for error in form.name.errors %}
-      <span style='color: red;'>[{{ error}}]</span>
-      {% endfor %}
-  </p>
-  <p>
-    {{ form.category1.label }}<br>
-    {{ form.category1(size=1) }}
-    {% for error in form.category1.errors %}
-    <span style='color: red;'>[{{ error}}]</span>
-    {% endfor %}
-  </p>
-  <p>
-    {{ form.category2.label }}<br>
-    {{ form.category2(size=1) }}
-    {% for error in form.category2.errors %}
-    <span style='color: red;'>[{{ error}}]</span>
-    {% endfor %}
-  </p>
-  <p> {{ form.submit() }}</p>
-</form>
+<div class="row">
+  <div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+  </div>
+</div>
 {% endblock %}
