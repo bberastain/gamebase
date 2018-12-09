@@ -11,8 +11,10 @@ def init_cats():
     form = SearchForm()
     cat1 = Category1.query.order_by(Category1.id).all()
     cat2 = Category2.query.order_by(Category2.id).all()
-    form.category1.choices = [(x+1, y.label) for x, y in enumerate(cat1)]
-    form.category2.choices = [(x+1, y.label) for x, y in enumerate(cat2)]
+    form.category1.choices = [(0, 'N/A')] + \
+                             [(x + 1, y.label) for x, y in enumerate(cat1)]
+    form.category2.choices = [(0, 'N/A')] + \
+                             [(x + 1, y.label) for x, y in enumerate(cat2)]
     return form
 
 
@@ -22,13 +24,13 @@ def index():
     form = init_cats()
     recent = Game.query.order_by(Game.id.desc()).all()
     if form.validate_on_submit():
-        if form.category1.data == 1 and form.category2.data == 1:
+        if form.category1.data == 0 and form.category2.data == 0:
             flash('Please select at least one category')
             return redirect(url_for('index'))
-        elif form.category1.data == 1 and form.category2.data != 1:
+        elif form.category1.data == 0:
             games = Game.query.filter_by(
                     category2_id=form.category2.data).all()
-        elif form.category1.data != 1 and form.category2.data == 1:
+        elif form.category2.data == 0:
             games = Game.query.filter_by(
                     category1_id=form.category1.data).all()
         else:
@@ -84,11 +86,20 @@ def addgame():
     form = GameForm()
     cat1 = Category1.query.order_by(Category1.id).all()
     cat2 = Category2.query.order_by(Category2.id).all()
-    form.category1.choices = [(x, y.label) for x, y in enumerate(cat1)]
-    form.category2.choices = [(x, y.label) for x, y in enumerate(cat2)]
+    form.category1.choices = [(0, 'N/A')] + \
+                             [(x + 1, y.label) for x, y in enumerate(cat1)]
+    form.category2.choices = [(0, 'N/A')] + \
+                             [(x + 1, y.label) for x, y in enumerate(cat2)]
     if form.validate_on_submit():
-        game = Game(name=form.name.data, category1_id=form.category1.data,
-                    category2_id=form.category2.data)
+        if form.category1.data == 0 and form.category2.data == 0:
+            game = Game(name=form.name.data)
+        elif form.category1.data == 0:
+            game = Game(name=form.name.data, category2_id=form.category2.data)
+        elif form.category2.data == 0:
+            game = Game(name=form.name.data, category1_id=form.category1.data)
+        else:
+            game = Game(name=form.name.data, category1_id=form.category1.data,
+                        category2_id=form.category2.data)
         db.session.add(game)
         db.session.commit()
         flash('Thank you for adding a new game!')

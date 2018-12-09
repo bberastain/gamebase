@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, PasswordField, BooleanField, \
     TextAreaField, SelectField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, \
     Length
-from app.models import User
+from app.models import User, Game
 
 
 class SearchForm(FlaskForm):
@@ -14,9 +14,14 @@ class SearchForm(FlaskForm):
 
 class GameForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
-    category1 = SelectField('Category 1', coerce=int, default=1)
-    category2 = SelectField('Category 2', coerce=int, default=1)
+    category1 = SelectField('Category 1', coerce=int, default=0)
+    category2 = SelectField('Category 2', coerce=int, default=0)
     submit = SubmitField('Add Game')
+
+    def validate_name(self, name):
+        game = Game.query.filter_by(name=name.data).first()
+        if game is not None:
+            raise ValidationError('A game with that name already exists')
 
 
 class LoginForm(FlaskForm):
