@@ -44,4 +44,10 @@
     {% endfor %}
 {% endif %}
 
+{% if not recent %}
+{% if not games %}
+<h2>There are no games matching those categories</h2>
+{% endif %}
+{% endif %}
+
 {% endblock %}

@@ -3,7 +3,20 @@ from wtforms import StringField, SubmitField, PasswordField, BooleanField, \
     TextAreaField, SelectField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, \
     Length
-from app.models import User, Game
+from app.models import User, Game, Category1, Category2
+
+
+class CategoryForm(FlaskForm):
+    category = StringField('New Category', validators=[DataRequired()])
+    submit = SubmitField('Add Category')
+
+    def validate_category(self, category):
+        cat1 = Category1.query.filter_by(label=category.data).first()
+        if cat1 is not None:
+            raise ValidationError('This category already exists')
+        cat2 = Category2.query.filter_by(label=category.data).first()
+        if cat2 is not None:
+            raise ValidationError('This category already exists')
 
 
 class SearchForm(FlaskForm):

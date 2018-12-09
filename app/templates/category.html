@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<h1>Add A New Category</h1>
+<h2>Category 1</h2>
+<div class="row">
+  <div class="col-md-4">
+    {{ wtf.quick_form(form1) }}
+  </div>
+</div>
+<h2>Category 2</h2>
+<div class="row">
+  <div class="col-md-4">
+    {{ wtf.quick_form(form2) }}
+  </div>
+</div>
+{% endblock %}

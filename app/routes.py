@@ -2,7 +2,7 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app.forms import GameForm, LoginForm, RegistrationForm, EditProfileForm, \
-    SearchForm
+    SearchForm, CategoryForm
 from app.models import Game, User, Category1, Category2
 from werkzeug.urls import url_parse
 
@@ -18,7 +18,26 @@ def init_cats():
     return form
 
 
-@app.route('/')
+@app.route('/category', methods=['GET', 'POST'])
+def category():
+    form1 = CategoryForm(prefix='form1')
+    form2 = CategoryForm(prefix='form2')
+    if form1.validate_on_submit():
+        category = Category1(label=form1.category.data)
+        db.session.add(category)
+        db.session.commit()
+        flash('New category added')
+        return redirect(url_for('index'))
+    if form2.validate_on_submit():
+        category = Category2(label=form2.category.data)
+        db.session.add(category)
+        db.session.commit()
+        flash('New category added')
+        return redirect(url_for('index'))
+    return render_template('category.html', form1=form1, form2=form2)
+
+
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = init_cats()
